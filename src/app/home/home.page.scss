@@ -25,3 +25,13 @@
 #container a {
   text-decoration: none;
 }
+
+.right{
+  float:right;
+
+}
+.messages::after {
+  content: "";
+  clear: both;
+  display: table;
+}
