@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { getAuth, RecaptchaVerifier } from "firebase/auth";
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-in',
@@ -11,7 +12,7 @@ export class SignInPage  {
   phoneNumber="+36303236954"
   code='111111'
   recaptchaInvisible:any
-  constructor(private auth:AuthService) { }
+  constructor(private auth:AuthService, private router:Router) { }
 
   ionViewDidEnter(){
       this.recaptchaInvisible= new RecaptchaVerifier(
@@ -30,19 +31,24 @@ export class SignInPage  {
     this.auth.signInWithPhone(this.phoneNumber,this.recaptchaInvisible).then(
       ()=>{
         //Kód bekér
-        this.auth.verificationCode(this.code).then(
-          (user:any)=>{
-            console.log("User", user)
-          }
-        ).catch(
-          (error:any)=>{
-            console.log("Code hiba!")
-          }
-        )
+        console.log('SMS elküldve')
       }
     ).catch(
       (error:any)=>{
         console.log("error:", error)
+      }
+    )
+  }
+
+  verificationCode(){
+    this.auth.verificationCode(this.code).then(
+      (user:any)=>{
+        console.log("User", user)
+        this.router.navigate(['/home'])
+      }
+    ).catch(
+      (error:any)=>{
+        console.log("Code hiba!")
       }
     )
   }

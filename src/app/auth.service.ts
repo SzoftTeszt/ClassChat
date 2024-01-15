@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -10,7 +11,7 @@ export class AuthService {
   userSub=new Subject()
   confirm:any
 
-  constructor(private fireAuth:AngularFireAuth) { 
+  constructor(private fireAuth:AngularFireAuth, private router:Router) { 
     this.fireAuth.onAuthStateChanged(
       (user)=>{this.userSub.next(user)}
     )
@@ -19,7 +20,9 @@ export class AuthService {
     return this.userSub;
   }
   logout(){
-    this.fireAuth.signOut()
+    this.fireAuth.signOut().then(
+      ()=>this.router.navigate(['/sign-in'])
+    )
   }
   
   signInWithPhone(phoneNumber:any, aqpplicationVerifier:any){
